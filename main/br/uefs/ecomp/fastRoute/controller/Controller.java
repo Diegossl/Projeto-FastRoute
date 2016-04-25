@@ -34,10 +34,10 @@ public class Controller {
 		return ponto;
 	}
 	
-	public void cadastrarAresta(Ponto origem, Ponto destino) throws PontoNuloException{
+	public void cadastrarAresta(Ponto origem, Ponto destino, double tempo) throws PontoNuloException{
 		if(origem == null || destino == null)
 			throw new PontoNuloException();
-		grafo.addAresta(origem, destino);
+		grafo.addAresta(origem, destino, tempo);
 	}
 	
 	public boolean removerAresta(Ponto origem, Ponto destino) throws PontoNuloException{

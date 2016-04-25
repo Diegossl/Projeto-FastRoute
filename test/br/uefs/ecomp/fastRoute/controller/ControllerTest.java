@@ -47,6 +47,7 @@ public class ControllerTest {
 
 		try {
 			controller.cadastrarPonto(novoPonto);
+			fail();
 		} catch (PontoNuloException e) {
 			assertTrue(true);
 		} catch (CampoObrigatorioInexistenteException e) {
@@ -86,23 +87,23 @@ public class ControllerTest {
 		}
 		
 		try {
-			controller.cadastrarAresta(pontoB, pontoC);
+			controller.cadastrarAresta(pontoB, pontoC, 2);
 		} catch (PontoNuloException e) {
 			fail();
 		}
 		
 		Aresta aresta = null;
 		
-		Iterator<Aresta> i = pontoB.getListaArestas().iterator();
+		Iterator<Aresta> i = pontoB.iterator();
 		aresta = i.next();
 		
-		assertEquals(pontoC, aresta.getAdjacencia());
+		assertEquals(pontoC, aresta.getPontoAdjacente());
 		
 		aresta = null;
-		Iterator<Aresta> i2 = pontoC.getListaArestas().iterator();
+		Iterator<Aresta> i2 = pontoC.iterator();
 		aresta = i2.next();
 		
-		assertEquals(pontoB, aresta.getAdjacencia());
+		assertEquals(pontoB, aresta.getPontoAdjacente());
 	}
 	
 	@Test
@@ -113,7 +114,7 @@ public class ControllerTest {
 		p1 = null;
 		p2 = null;
 		try {
-			controller.cadastrarAresta(p1, p2);
+			controller.cadastrarAresta(p1, p2, 2);
 			fail();
 		} catch (PontoNuloException e) {
 			assertTrue(true);
@@ -137,7 +138,7 @@ public class ControllerTest {
 		}
 		
 		try {
-			controller.cadastrarAresta(pontoB, pontoC);
+			controller.cadastrarAresta(pontoB, pontoC, 2);
 		} catch (PontoNuloException e) {
 			fail();
 		}

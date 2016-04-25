@@ -1,6 +1,7 @@
 package br.uefs.ecomp.fastRoute.util;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public abstract class Ponto {
 	
@@ -18,6 +19,8 @@ public abstract class Ponto {
 	public abstract void addAresta(Aresta aresta);
 	
 	public abstract boolean removerAresta(Aresta aresta);
+	
+	public abstract Iterator<Aresta> iterator();
 
 	public String getNome() {
 		return nome;
@@ -26,9 +29,4 @@ public abstract class Ponto {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
-	public ArrayList<Aresta> getListaArestas() {
-		return listaArestas;
-	}
-	
 }

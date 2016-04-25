@@ -28,7 +28,7 @@ public class Grafo implements IGrafo {
 	}
 
 	@Override
-	public Iterator<Ponto> imprimirGrafo() {
+	public Iterator<Ponto> iterator() {
 		return listaPontos.iterator();
 	}
 
@@ -38,11 +38,13 @@ public class Grafo implements IGrafo {
 	}
 
 	@Override
-	public void addAresta(Object origem, Object destino) {
+	public void addAresta(Object origem, Object destino, double peso) {
 		Ponto p1 = (Ponto) origem;
 		Ponto p2 = (Ponto) destino;
 		Aresta arestaDestino = new Aresta(p2);//Crio aresta com ponto p2
+		arestaDestino.setTempo(peso);
 		Aresta arestaOrigem = new Aresta(p1);//Crio aresta com ponto p1
+		arestaOrigem.setTempo(peso);
 		p1.addAresta(arestaDestino);//Adiciono ao ponto p1 a aresta que liga origem ao destino
 		p2.addAresta(arestaOrigem);//Adiciono ao ponto p2 a aresta que liga destino a origem
 	}
@@ -52,11 +54,11 @@ public class Grafo implements IGrafo {
 		/*Procuro pela aresta que contem o ponto destino dentro da lista de arestas de do ponto origem*/
 		Ponto pontoInicial = (Ponto) origem;
 		Ponto pontoFinal = (Ponto) destino;
-		Iterator<Aresta> i = pontoInicial.getListaArestas().iterator();
+		Iterator<Aresta> i = pontoInicial.iterator();
 		Aresta aresta = null;
 		while(i.hasNext()){
 			aresta = i.next();
-			if(aresta.getAdjacencia().equals(pontoFinal))
+			if(aresta.getPontoAdjacente().equals(pontoFinal))
 				return aresta;
 		}
 		return null;
@@ -80,13 +82,13 @@ public class Grafo implements IGrafo {
 		/*Removo o ponto e as arestas adjacentes a ele.
 		 * Obs: ainda vou revisar esse código*/
 		Ponto ponto = (Ponto) o;
-		Iterator<Aresta> i = ponto.getListaArestas().iterator();
+		Iterator<Aresta> i = ponto.iterator();
 		Aresta arestaAtual = null;
 		Aresta achou = null;
 		Ponto destino = null;
 		while(i.hasNext()){
 			arestaAtual = i.next();
-			destino = arestaAtual.getAdjacencia();
+			destino = arestaAtual.getPontoAdjacente();
 			achou = buscarAresta(destino, ponto);
 			if(achou != null){
 				destino.removerAresta(achou);
@@ -95,7 +97,7 @@ public class Grafo implements IGrafo {
 			else
 				break;
 		}
-		if(ponto.getListaArestas().isEmpty())
+		if(!ponto.iterator().hasNext())
 			return true;
 		return false;
 	}

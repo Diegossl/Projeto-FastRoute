@@ -1,6 +1,7 @@
 package br.uefs.ecomp.fastRoute.model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import br.uefs.ecomp.fastRoute.util.Aresta;
 import br.uefs.ecomp.fastRoute.util.Ponto;
@@ -25,5 +26,9 @@ public class PontoColeta extends Ponto {
 	public boolean removerAresta(Aresta aresta) {
 		return listaArestas.remove(aresta);
 	}
-	
+
+	@Override
+	public Iterator<Aresta> iterator() {
+		return listaArestas.iterator();
+	}
 }

@@ -6,13 +6,13 @@ public interface IGrafo {
 	
 	public int obterTamanho();
 	
-	public Iterator<?> imprimirGrafo();
+	public Iterator<?> iterator();
 	
 	public void addVertice(Object o);
 	
-	public void addAresta(Object origem, Object destino);
+	public void addAresta(Object origem, Object destino, double peso);
 	
-	public Aresta buscarAresta(Object origem, Object destino);
+	public Object buscarAresta(Object origem, Object destino);
 	
 	public boolean removerAresta(Object origem, Object destino);
 	

@@ -2,11 +2,11 @@ package br.uefs.ecomp.fastRoute.util;
 
 public class Aresta {
 	
-	private Ponto adjacencia;
+	private Ponto pontoAdjacente;
 	private double tempo;
 	
 	public Aresta(Ponto adj){
-		this.adjacencia = adj;
+		this.pontoAdjacente = adj;
 	}
 	
 	public double getTempo() {
@@ -17,7 +17,7 @@ public class Aresta {
 		this.tempo = tempo;
 	}
 
-	public Ponto getAdjacencia() {
-		return adjacencia;
+	public Ponto getPontoAdjacente() {
+		return pontoAdjacente;
 	}
 }
