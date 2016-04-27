@@ -29,4 +29,7 @@ public abstract class Ponto {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+	public int[][] gerarMatriz(ArrayList<Ponto> pontos) {
+		
+	}
 }
