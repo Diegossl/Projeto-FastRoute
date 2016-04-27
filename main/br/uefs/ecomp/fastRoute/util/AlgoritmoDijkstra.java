@@ -45,16 +45,18 @@ public class AlgoritmoDijkstra {
 //	}
 	public void menorCaminho(){
 		inicializarCustos();
-		
-		int atual = menorProximo();
-		naoVisitados.remove(atual);
-		 for(Integer vizinho : pegarVizinhos(atual)) {
-			 int custoTotal = custos[atual] + pegaCusto(atual, vizinho);
-			 if(custoTotal < custos[vizinho]) {
-				 custos[vizinho] = custoTotal;
-				 anteriores[vizinho] = atual;
+		while(!naoVisitados.isEmpty()) {
+			int atual = menorProximo();
+			naoVisitados.remove(atual);
+			 for(Integer vizinho : pegarVizinhos(atual)) {
+				 int custoTotal = custos[atual] + pegaCusto(atual, vizinho);
+				 if(custoTotal < custos[vizinho]) {
+					 custos[vizinho] = custoTotal;
+					 anteriores[vizinho] = atual;
+				 }
 			 }
-		 }
+		}
+		
 	}
 	public int menorProximo() {
 		int minimo = INFINITO;
