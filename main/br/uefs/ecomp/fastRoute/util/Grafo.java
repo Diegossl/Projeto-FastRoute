@@ -102,4 +102,16 @@ public class Grafo implements IGrafo {
 		return false;
 	}
 	
+	public int[][] paraMatriz() {
+		Iterator iteradorPontos= listaPontos.iterator();
+		Iterator iteradorArestas;
+		while(iteradorPontos.hasNext()) {
+			Ponto pontoAux = (Ponto) iteradorPontos.next();
+			iteradorArestas = pontoAux.iterator();
+			while(iteradorArestas.hasNext()) {
+				
+			}
+		}
+	}
+	
 }
