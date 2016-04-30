@@ -19,6 +19,24 @@ public class Principal {
 		
 		grafo = Grafo.getInstance();
 		
+		PontoPassagem p1 = new PontoPassagem("UM");
+		PontoPassagem p2 = new PontoPassagem("DOIS");
+		PontoPassagem p3 = new PontoPassagem("TRES");
+		
+		grafo.addVertice(p1);
+		grafo.addVertice(p2);
+		grafo.addVertice(p3);
+		grafo.addAresta(p1, p2, 4);
+		grafo.addAresta(p2, p3, 5);
+		
+		System.out.println("" +p3.getId());
+		int[][] matriz = grafo.paraMatriz();
+		for(int i = 0; i < matriz.length; i++) {
+			for(int j = 0; j < matriz.length; j++) {
+				System.out.print(matriz[i][j] + " ");
+			}
+			System.out.println();
+		}
 		
 	}
 

@@ -6,8 +6,13 @@ import java.util.Iterator;
 public abstract class Ponto {
 	
 	protected String nome;
+	protected int id;
+	
+
 	protected ArrayList<Aresta> listaArestas;
 	
+	
+
 	public Ponto(String nome, ArrayList<Aresta> listaArestas){
 		
 	}
@@ -29,7 +34,31 @@ public abstract class Ponto {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public int[][] gerarMatriz(ArrayList<Ponto> pontos) {
-		
+	
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+	/**
+	 * @return the listaArestas
+	 */
+	public ArrayList<Aresta> getListaArestas() {
+		return listaArestas;
+	}
+
+	/**
+	 * @param listaArestas the listaArestas to set
+	 */
+	public void setListaArestas(ArrayList<Aresta> listaArestas) {
+		this.listaArestas = listaArestas;
 	}
 }

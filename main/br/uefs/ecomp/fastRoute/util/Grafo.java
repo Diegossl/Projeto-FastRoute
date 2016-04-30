@@ -103,15 +103,22 @@ public class Grafo implements IGrafo {
 	}
 	
 	public int[][] paraMatriz() {
-		Iterator iteradorPontos= listaPontos.iterator();
-		Iterator iteradorArestas;
+		
+		int[][] matriz = new int[listaPontos.size()][listaPontos.size()];
+		Iterator<Ponto> iteradorPontos= listaPontos.iterator();
+		Iterator<?> iteradorArestas;
+		
 		while(iteradorPontos.hasNext()) {
 			Ponto pontoAux = (Ponto) iteradorPontos.next();
-			iteradorArestas = pontoAux.iterator();
+			iteradorArestas = pontoAux.getListaArestas().iterator();
 			while(iteradorArestas.hasNext()) {
-				
+				Aresta arestaAux = (Aresta) iteradorArestas.next();
+				if(matriz[pontoAux.getId()][arestaAux.getPontoAdjacente().getId()] == 0) {
+					matriz[pontoAux.getId()][arestaAux.getPontoAdjacente().getId()] = (int) arestaAux.getTempo();
+				}
 			}
 		}
+		return matriz;
 	}
 	
 }

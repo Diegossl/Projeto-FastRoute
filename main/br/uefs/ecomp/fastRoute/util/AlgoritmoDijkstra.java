@@ -14,8 +14,7 @@ public class AlgoritmoDijkstra {
 	private int[] anteriores;
 	private ArrayList<Integer> naoVisitados;
 	
-	private int comeco;
-	private int fim;
+	
 	
 	
 	public AlgoritmoDijkstra(Grafo grafo){
@@ -43,7 +42,7 @@ public class AlgoritmoDijkstra {
 //		}
 //		return menor.getPontoAdjacente();
 //	}
-	public void menorCaminho(){
+	public int[] menorCaminho(){
 		inicializarCustos();
 		while(!naoVisitados.isEmpty()) {
 			int atual = menorProximo();
@@ -56,7 +55,7 @@ public class AlgoritmoDijkstra {
 				 }
 			 }
 		}
-		
+		return anteriores;
 	}
 	public int menorProximo() {
 		int minimo = INFINITO;
