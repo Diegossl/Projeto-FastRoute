@@ -1,7 +1,9 @@
+
 package br.uefs.ecomp.fastRoute.controller;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.junit.Before;
@@ -11,7 +13,10 @@ import br.uefs.ecomp.fastRoute.exceptions.CampoObrigatorioInexistenteException;
 import br.uefs.ecomp.fastRoute.exceptions.PontoNuloException;
 import br.uefs.ecomp.fastRoute.model.PontoColeta;
 import br.uefs.ecomp.fastRoute.model.PontoPartida;
+import br.uefs.ecomp.fastRoute.model.PontoPassagem;
+import br.uefs.ecomp.fastRoute.util.AlgoritmoDijkstra;
 import br.uefs.ecomp.fastRoute.util.Aresta;
+import br.uefs.ecomp.fastRoute.util.Grafo;
 import br.uefs.ecomp.fastRoute.util.Ponto;
 
 public class ControllerTest {
@@ -155,5 +160,46 @@ public class ControllerTest {
 		
 		assertEquals(1, chave);
 	}
-	
+	@Test 
+	public void testMenorCaminho() {
+		
+		Grafo grafo = Grafo.getInstance();
+		
+		PontoPassagem a = new PontoPassagem("A");
+		PontoPassagem b = new PontoPassagem("B");
+		PontoPassagem c = new PontoPassagem("C");
+		PontoPassagem d = new PontoPassagem("D");
+		PontoPassagem e = new PontoPassagem("E");
+		
+		grafo.addVertice(a);
+		grafo.addVertice(b);
+		grafo.addVertice(d);
+		grafo.addVertice(e);
+		grafo.addVertice(c);
+		
+		grafo.addAresta(a, b, 50);
+		grafo.addAresta(a, d, 80);
+		grafo.addAresta(b, c, 60);
+		grafo.addAresta(b, d, 90);
+		grafo.addAresta(d, c, 20);
+		grafo.addAresta(d, e, 70);
+		grafo.addAresta(c, e, 40);
+		
+		int[][] matriz = grafo.paraMatriz();
+		
+		AlgoritmoDijkstra alg = new AlgoritmoDijkstra(matriz);
+		
+		ArrayList<Integer> caminho = alg.menorCaminho();
+		
+		if(caminho == null) {
+			fail();
+		}
+		assertEquals(4, caminho.size());
+		
+		assertEquals(Integer.valueOf(1), caminho.get(0));
+		assertEquals(Integer.valueOf(0), caminho.get(1));
+		assertEquals(Integer.valueOf(2), caminho.get(2));
+		assertEquals(Integer.valueOf(4), caminho.get(3));
+		
+	}
 }

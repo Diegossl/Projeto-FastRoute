@@ -6,9 +6,9 @@ import java.util.List;
 
 public class AlgoritmoDijkstra {
 	
-	private Grafo grafo;
+	//private Grafo grafo;
 	private final int INFINITO = 1000000;
-	private ArrayList<Ponto> menorCaminho;
+	//private ArrayList<Ponto> menorCaminho;
 	private int[][] matAdj;
 	private int[] custos;
 	private int[] anteriores;
@@ -17,18 +17,28 @@ public class AlgoritmoDijkstra {
 	
 	
 	
-	public AlgoritmoDijkstra(Grafo grafo){
-		this.grafo = grafo;
-		menorCaminho = new ArrayList<Ponto>();
+//	public AlgoritmoDijkstra(Grafo grafo){
+//		this.grafo = grafo;
+//		menorCaminho = new ArrayList<Ponto>();
+//	}
+	public AlgoritmoDijkstra(int[][] matAdj){
+		this.matAdj = matAdj;
+		naoVisitados = new ArrayList<>();
+//		menorCaminho = new ArrayList<Ponto>();
 	}
-	
 //	public ArrayList<Ponto> menorCaminho(){
 //		return null;
 //	}
 	public void inicializarCustos() {
+		custos = new int[matAdj.length];
 		custos[0] = 0;
 		for(int i = 1; i < matAdj.length; i++) {
 			custos[i] = INFINITO;
+		}
+	}
+	public void inicializarNaoVisitados() {
+		for(int i = 0; i < matAdj.length; i++) {
+			naoVisitados.add(i);
 		}
 	}
 //	public Ponto menorAresta(Ponto ponto){
@@ -43,14 +53,21 @@ public class AlgoritmoDijkstra {
 //		return menor.getPontoAdjacente();
 //	}
 	public int[] menorCaminho(){
+		//ArrayList<Ponto> menorCaminho = new ArrayList<Ponto>();
+		anteriores = new int[matAdj.length];
+		//ArrayList<Integer> anteriores = new ArrayList<>();
 		inicializarCustos();
+		inicializarNaoVisitados();
 		while(!naoVisitados.isEmpty()) {
 			int atual = menorProximo();
+			System.out.println("Atual: " +atual);
+//			System.out.println("Primeiro custo: " +custos[0]);
 			naoVisitados.remove(atual);
 			 for(Integer vizinho : pegarVizinhos(atual)) {
 				 int custoTotal = custos[atual] + pegaCusto(atual, vizinho);
 				 if(custoTotal < custos[vizinho]) {
 					 custos[vizinho] = custoTotal;
+					 //anteriores.set(vizinho, atual);
 					 anteriores[vizinho] = atual;
 				 }
 			 }
@@ -59,8 +76,10 @@ public class AlgoritmoDijkstra {
 	}
 	public int menorProximo() {
 		int minimo = INFINITO;
-		for(int i = 0; i < matAdj[0].length; i++) {
-			if(custos[i] < minimo && naoVisitados.get(i) == -1) {
+		if(custos[0] == 0) 
+				return 0;
+		for(int i = 1; i < matAdj.length; i++) {
+			if(custos[i] < minimo && !naoVisitados.contains(i)) {
 				minimo = i;
 			}
 		}
