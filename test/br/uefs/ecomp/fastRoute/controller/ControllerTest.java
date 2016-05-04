@@ -41,7 +41,6 @@ public class ControllerTest {
 		} catch (CampoObrigatorioInexistenteException e) {
 			fail();
 		}
-			
 		assertEquals(novoPonto, ponto);
 	}
 	

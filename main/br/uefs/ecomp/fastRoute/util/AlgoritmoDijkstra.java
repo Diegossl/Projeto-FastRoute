@@ -76,8 +76,7 @@ public class AlgoritmoDijkstra {
 	}
 	public int menorProximo() {
 		int minimo = INFINITO;
-		if(custos[0] == 0) 
-				return 0;
+		
 		for(int i = 1; i < matAdj.length; i++) {
 			if(custos[i] < minimo && !naoVisitados.contains(i)) {
 				minimo = i;
