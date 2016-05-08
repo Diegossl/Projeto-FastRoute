@@ -1,5 +1,8 @@
 package br.uefs.ecomp.fastRoute.controller;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import br.uefs.ecomp.fastRoute.exceptions.CampoObrigatorioInexistenteException;
 import br.uefs.ecomp.fastRoute.exceptions.PontoNuloException;
 import br.uefs.ecomp.fastRoute.util.Grafo;
@@ -9,6 +12,8 @@ public class Controller {
 	
 	private static Controller instanciaController;
 	private static Grafo grafo;
+	
+	
 	
 	private Controller(){
 		Grafo.zerarSingleton();
@@ -26,9 +31,9 @@ public class Controller {
 	}
 	
 	public Ponto cadastrarPonto(Ponto ponto) throws PontoNuloException, CampoObrigatorioInexistenteException{
-		if(ponto == null)
+		if(ponto == null) 
 			throw new PontoNuloException();
-		if(ponto.getNome().trim().isEmpty())
+		if (ponto.getNome() == null || ponto.getNome().trim().isEmpty())
 			throw new CampoObrigatorioInexistenteException();
 		grafo.addVertice(ponto);
 		return ponto;
@@ -56,5 +61,8 @@ public class Controller {
 		
 	}
 	
+	public ArrayList<Ponto> getLista() {
+		return grafo.getListaPontos();
+	}
 	
 }

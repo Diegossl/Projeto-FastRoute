@@ -14,7 +14,8 @@ public abstract class Ponto {
 	
 
 	public Ponto(String nome, ArrayList<Aresta> listaArestas){
-		
+		this.nome = nome;
+		this.listaArestas = listaArestas;
 	}
 	
 	public Ponto(){
@@ -60,5 +61,10 @@ public abstract class Ponto {
 	 */
 	public void setListaArestas(ArrayList<Aresta> listaArestas) {
 		this.listaArestas = listaArestas;
+	}
+	
+	@Override 
+	public String toString() {
+		return this.getNome();
 	}
 }

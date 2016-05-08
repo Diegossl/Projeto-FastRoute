@@ -120,5 +120,7 @@ public class Grafo implements IGrafo {
 		}
 		return matriz;
 	}
-	
+	public ArrayList<Ponto> getListaPontos() {
+		return this.listaPontos;
+	}
 }

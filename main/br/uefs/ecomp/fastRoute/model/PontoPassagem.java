@@ -9,7 +9,8 @@ import br.uefs.ecomp.fastRoute.util.Ponto;
 public class PontoPassagem extends Ponto {
 	
 	private static int idClasse = -1;
-	
+	private int x;
+	private int y;
 
 	public PontoPassagem(String nome, ArrayList<Aresta> listaArestas) {
 		super(nome, listaArestas);
@@ -37,5 +38,33 @@ public class PontoPassagem extends Ponto {
 	@Override
 	public Iterator<Aresta> iterator() {
 		return listaArestas.iterator();
+	}
+
+	/**
+	 * @return the x
+	 */
+	public int getX() {
+		return x;
+	}
+
+	/**
+	 * @param x the x to set
+	 */
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	/**
+	 * @return the y
+	 */
+	public int getY() {
+		return y;
+	}
+
+	/**
+	 * @param y the y to set
+	 */
+	public void setY(int y) {
+		this.y = y;
 	}
 }

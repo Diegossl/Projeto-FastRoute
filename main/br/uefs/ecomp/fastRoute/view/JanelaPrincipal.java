@@ -21,6 +21,11 @@ import java.awt.FlowLayout;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
+
+import br.uefs.ecomp.fastRoute.controller.Controller;
+import br.uefs.ecomp.fastRoute.model.PontoPassagem;
+import br.uefs.ecomp.fastRoute.util.Ponto;
+
 import javax.swing.JList;
 import java.awt.SystemColor;
 import java.awt.dnd.DropTargetDropEvent;
@@ -34,7 +39,9 @@ import java.awt.Canvas;
 import java.awt.Button;
 import javax.swing.JTextPane;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.event.MouseMotionAdapter;
+import java.util.Iterator;
 import java.awt.event.MouseEvent;
 import javax.swing.JToolBar;
 import java.awt.Component;
@@ -91,47 +98,14 @@ public class JanelaPrincipal {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		//Controller controller = Controller.getInstance();
 		frame = new JFrame();
-		frame.setBounds(100, 100, 711, 547);
+		
+		frame.setBounds(100, 100, 856, 553);
+		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
-		
-		Canvas canvas = new Canvas();
-		canvas.setBackground(SystemColor.scrollbar);
-		canvas.setBounds(0, 40, 695, 468);
-		frame.getContentPane().add(canvas);
-		
-		Panel panel = new Panel();
-		panel.setBounds(0, -21, 695, 529);
-		frame.getContentPane().add(panel);
-		
-		JToolBar toolBar = new JToolBar();
-		GroupLayout gl_panel = new GroupLayout(panel);
-		gl_panel.setHorizontalGroup(
-			gl_panel.createParallelGroup(Alignment.LEADING)
-				.addComponent(toolBar, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 695, Short.MAX_VALUE)
-		);
-		gl_panel.setVerticalGroup(
-			gl_panel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel.createSequentialGroup()
-					.addGap(22)
-					.addComponent(toolBar, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(447, Short.MAX_VALUE))
-		);
-		
-		JButton btnButton = new JButton("");
-		
-		btnButton.setContentAreaFilled(false);
-		btnButton.setOpaque(false);
-		btnButton.setBorderPainted(false);
-		
-		btnButton.setToolTipText("Cadastrar");
-		btnButton.setIcon(new ImageIcon("imagem\\add.png"));
-		
-		toolBar.add(btnButton);
 		
 		JPopupMenu popupMenu = new JPopupMenu();
-		addPopup(btnButton, popupMenu);
 		
 		JMenuItem mntmCadastrarPonto = new JMenuItem("Cadastrar Ponto");
 		mntmCadastrarPonto.setIcon(new ImageIcon("imagem\\bank.png"));
@@ -139,18 +113,15 @@ public class JanelaPrincipal {
 		
 		JMenuItem mntmCadastrarCaminho = new JMenuItem("Cadastrar Caminho");
 		mntmCadastrarCaminho.setIcon(new ImageIcon("imagem\\line.png"));
+		mntmCadastrarCaminho.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				CadastroAresta cadastroAresta = new CadastroAresta();
+				cadastroAresta.setVisible(true);
+			}
+		});
 		popupMenu.add(mntmCadastrarCaminho);
 		
-		JButton button = new JButton("");
-		button.setContentAreaFilled(false);
-		button.setOpaque(false);
-		button.setBorderPainted(false);
-		button.setToolTipText("Remover");
-		button.setIcon(new ImageIcon("imagem\\garbage.png"));
-		toolBar.add(button);
-		
 		JPopupMenu popupMenu_1 = new JPopupMenu();
-		addPopup(button, popupMenu_1);
 		
 		JMenuItem mntmRemoverPonto = new JMenuItem("Remover Ponto");
 		mntmRemoverPonto.setIcon(new ImageIcon("imagem\\bank.png"));
@@ -159,6 +130,66 @@ public class JanelaPrincipal {
 		JMenuItem mntmRemoverCaminho = new JMenuItem("Remover Caminho");
 		mntmRemoverCaminho.setIcon(new ImageIcon("imagem\\line.png"));
 		popupMenu_1.add(mntmRemoverCaminho);
+		frame.getContentPane().setLayout(null);
+		
+		JPanel panel = new JPanel();
+		panel.setBounds(0, 38, 840, 476);
+		frame.getContentPane().add(panel);
+		
+		Painel painel = new Painel();
+		painel.setBackground(SystemColor.controlHighlight);
+		GroupLayout gl_panel = new GroupLayout(panel);
+		gl_panel.setHorizontalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addComponent(painel, GroupLayout.DEFAULT_SIZE, 840, Short.MAX_VALUE)
+		);
+		gl_panel.setVerticalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addComponent(painel, GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
+		);
+		painel.addMouseListener(new MouseAdapter() {
+			//@SuppressWarnings("unused")
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				Graphics g = painel.getGraphics();
+				CadastroPonto cadastroPonto = new CadastroPonto(arg0.getX(), arg0.getY());
+				cadastroPonto.setVisible(true);
+				g.setColor(Color.blue);
+				g.fillOval(arg0.getX()-30/2, arg0.getY()-30/2, 30, 30);	
+//				if(cadastroPonto.foiSucesso() ) {
+//					g.setColor(Color.blue);
+//					g.fillOval(arg0.getX()-30/2, arg0.getY()-30/2, 30, 30);	
+//				} else {
+//					System.out.println("Nao foi sucesso");
+//				}
+			}
+		});
+		
+		
+		
+		
+		panel.setLayout(gl_panel);
+		
+		JToolBar toolBar = new JToolBar();
+		toolBar.setBounds(0, 0, 840, 39);
+		frame.getContentPane().add(toolBar);
+		JButton btnButton = new JButton("");
+		btnButton.setOpaque(false);
+		
+		btnButton.setToolTipText("Cadastrar");
+		btnButton.setIcon(new ImageIcon("imagem\\add.png"));
+		
+		toolBar.add(btnButton);
+		addPopup(btnButton, popupMenu);
+		
+		JButton button = new JButton("");
+		button.setContentAreaFilled(false);
+		button.setOpaque(false);
+		button.setBorderPainted(false);
+		button.setToolTipText("Remover");
+		button.setIcon(new ImageIcon("imagem\\garbage.png"));
+		toolBar.add(button);
+		addPopup(button, popupMenu_1);
 		
 		JButton button_1 = new JButton("");
 		
@@ -166,11 +197,6 @@ public class JanelaPrincipal {
 		button_1.setToolTipText("Calcular Menor Caminho");
 		button_1.setIcon(new ImageIcon("imagem\\route.png"));
 		toolBar.add(button_1);
-		
-		
-		
-		
-		panel.setLayout(gl_panel);
 		
 		
 		
