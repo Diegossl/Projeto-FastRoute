@@ -121,10 +121,10 @@ public class Controller {
 				arestaAtual = i.next();
 				destino = arestaAtual.getPontoAdjacente();
 				achou = buscarAresta(destino, ponto);
-				destino.removerAresta(achou);
-				ponto.removerAresta(arestaAtual);
-
-
+				if(achou != null){
+					destino.removerAresta(achou);
+					i.remove();
+				}
 			}
 			return listaPontos.remove(ponto);
 		}
@@ -166,5 +166,20 @@ public class Controller {
 		}
 		return listaPontosMenorCaminho;
 	}
-	
+	public ArrayList<Aresta> pegarArestasMenorRota(ArrayList<Vertice> caminho) {
+		
+		ArrayList<Aresta> arestasCaminho = new ArrayList<>();
+		Iterator<Vertice> i = caminho.iterator();
+		while(i.hasNext()) {
+			Vertice ponto = i.next();
+			Vertice proxPonto = i.next();
+			Iterator<Aresta> iAresta = ponto.iterator();
+			while(iAresta.hasNext()) {
+				Aresta arestaAux = iAresta.next();
+				if(arestaAux.getPontoAdjacente().equals(proxPonto))
+					arestasCaminho.add(arestaAux);						
+			}
+		}
+		return arestasCaminho;
+	}
 }

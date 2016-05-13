@@ -51,13 +51,17 @@ public class Painel extends JPanel {
 
 		Controller controller = Controller.getInstance();
 		ArrayList<Vertice> pontos = controller.getListaPontos();
+		ArrayList<Aresta> arestasCaminho = controller.pegarArestasMenorRota(caminho);
+		
 		Iterator<Vertice> i = pontos.iterator();
 		while(i.hasNext()) {
 			Vertice ponto = (Vertice) i.next();
+			
 			if(caminho.contains(ponto)) 
-				g.setColor(Color.green);
+				g.setColor(new Color(56, 245, 96));
 			else 
 				g.setColor(new Color(170, 163, 242));
+			
 			g.fillOval(ponto.getX()-40/2, ponto.getY()-40/2, 40, 40);	
 			g.setColor(Color.black);
 			g.drawString(ponto.getNome(), ponto.getX() - 20, ponto.getY() - 25);
@@ -67,8 +71,8 @@ public class Painel extends JPanel {
 				Aresta aresta = iteradorArestas.next();
 				Vertice pontoAdj = (Vertice) aresta.getPontoAdjacente();
 				g.setColor(Color.black);
-//				if(caminho.contains(pontoAdj))
-//					g.setColor(Color.green);
+				if(arestasCaminho.contains(aresta))
+					g.setColor(new Color(56, 245, 96));
 				g.drawLine(ponto.getX(), ponto.getY(), pontoAdj.getX() , pontoAdj.getY());
 			}
 		}

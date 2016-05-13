@@ -53,5 +53,8 @@ public class Vertice {
 	public String toString() {
 		return nome;
 	}
-
+	
+	public ArrayList<Aresta> getLista() {
+		return listaArestas;
+	}
 }
