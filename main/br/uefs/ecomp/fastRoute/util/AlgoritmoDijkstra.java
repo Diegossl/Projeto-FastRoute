@@ -1,99 +1,85 @@
 package br.uefs.ecomp.fastRoute.util;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public class AlgoritmoDijkstra {
 	
-	//private Grafo grafo;
-	private final int INFINITO = 1000000;
-	//private ArrayList<Ponto> menorCaminho;
-	private int[][] matAdj;
-	private int[] custos;
-	private int[] anteriores;
-	private ArrayList<Integer> naoVisitados;
+	private static final int INDEFINIDO = -1;
+	private Grafo grafo;
 	
-	
-	
-	
-//	public AlgoritmoDijkstra(Grafo grafo){
-//		this.grafo = grafo;
-//		menorCaminho = new ArrayList<Ponto>();
-//	}
-	public AlgoritmoDijkstra(int[][] matAdj){
-		this.matAdj = matAdj;
-		naoVisitados = new ArrayList<>();
-//		menorCaminho = new ArrayList<Ponto>();
+	public AlgoritmoDijkstra(Grafo grafo){
+		this.grafo = grafo;
 	}
-//	public ArrayList<Ponto> menorCaminho(){
-//		return null;
-//	}
-	public void inicializarCustos() {
-		custos = new int[matAdj.length];
-		custos[0] = 0;
-		for(int i = 1; i < matAdj.length; i++) {
-			custos[i] = INFINITO;
+	
+	public ArrayList<Integer> caminho(int inicio, int fim){
+		int custo[] = new int[grafo.getMatrizAdj().length];
+		int antecessores[] = new int[grafo.getMatrizAdj().length];
+		Set<Integer> naoVisitados = new HashSet<>();
+
+		custo[inicio] = 0;
+		for (int v = 0; v < grafo.getMatrizAdj().length; v++) {
+			if (v != inicio) {
+				custo[v] = Integer.MAX_VALUE;
+			}
+			antecessores[v] = INDEFINIDO;
+			naoVisitados.add(v);
 		}
-	}
-	public void inicializarNaoVisitados() {
-		for(int i = 0; i < matAdj.length; i++) {
-			naoVisitados.add(i);
-		}
-	}
-//	public Ponto menorAresta(Ponto ponto){
-//		Iterator<Aresta> i = ponto.iterator();
-//		Aresta atual = null;
-//		Aresta menor = i.next();
-//		while(i.hasNext()){
-//			atual = i.next();
-//			if(atual.getTempo() < menor.getTempo())
-//				menor = atual;
-//		}
-//		return menor.getPontoAdjacente();
-//	}
-	public int[] menorCaminho(){
-		//ArrayList<Ponto> menorCaminho = new ArrayList<Ponto>();
-		anteriores = new int[matAdj.length];
-		//ArrayList<Integer> anteriores = new ArrayList<>();
-		inicializarCustos();
-		inicializarNaoVisitados();
-		while(!naoVisitados.isEmpty()) {
-			int atual = menorProximo();
-			System.out.println("Atual: " +atual);
-//			System.out.println("Primeiro custo: " +custos[0]);
-			naoVisitados.remove(atual);
-			 for(Integer vizinho : pegarVizinhos(atual)) {
-				 int custoTotal = custos[atual] + pegaCusto(atual, vizinho);
-				 if(custoTotal < custos[vizinho]) {
-					 custos[vizinho] = custoTotal;
-					 //anteriores.set(vizinho, atual);
-					 anteriores[vizinho] = atual;
-				 }
-			 }
-		}
-		return anteriores;
-	}
-	public int menorProximo() {
-		int minimo = INFINITO;
-		
-		for(int i = 1; i < matAdj.length; i++) {
-			if(custos[i] < minimo && !naoVisitados.contains(i)) {
-				minimo = i;
+
+		while(!naoVisitados.isEmpty()){
+			int menorDistancia =  menorDistancia(custo, naoVisitados);
+			naoVisitados.remove(menorDistancia);
+
+			for (Integer vizinho : getVizinhos(menorDistancia)) {
+				int custoTotal = custo[menorDistancia] + getCusto(menorDistancia, vizinho);
+				if (custoTotal < custo[vizinho]) {
+					custo[vizinho] = custoTotal;
+					antecessores[vizinho] = menorDistancia;
+				}
+				if (menorDistancia == fim) {
+					return listaCaminhos(antecessores, menorDistancia);
+				}
 			}
 		}
-		return minimo;
+		return null;
 	}
-	public ArrayList<Integer> pegarVizinhos(int ponto) {
-		ArrayList<Integer> vizinhos = new ArrayList<>();
-		for(int i = 0; i < matAdj[ponto].length; i++) {
-			if(matAdj[ponto][i] > 0) {
+
+	public ArrayList<Integer> listaCaminhos(int[] antecessores, int u) {
+		ArrayList<Integer> caminho = new ArrayList<Integer>();
+		caminho.add(u);
+		while(antecessores[u] != INDEFINIDO) {
+			caminho.add(antecessores[u]);
+			u = antecessores[u];
+		}
+		Collections.reverse(caminho);
+		return caminho;
+	}
+
+	public int getCusto(int vertice1, int vertice2) {
+		return grafo.getMatrizAdj()[vertice1][vertice2];
+	}
+
+	public ArrayList<Integer> getVizinhos(int vertice) {
+		ArrayList<Integer> vizinhos = new ArrayList<Integer>();
+		for (int i = 0; i < grafo.getMatrizAdj()[vertice].length; i++)
+			if (grafo.getMatrizAdj()[vertice][i] > 0) {
 				vizinhos.add(i);
 			}
-		}
 		return vizinhos;
-	} 
-	private Integer pegaCusto(Integer atual, Integer vizinho) {
-		return matAdj[atual][vizinho];
 	}
+
+	public int menorDistancia(int[] dist, Set<Integer> naoVisitados) {
+		double minDist = Integer.MAX_VALUE;
+		int minIndex = 0;
+		for (Integer i : naoVisitados) {
+			if (dist[i] < minDist) {
+				minDist = dist[i];
+				minIndex = i;
+			}
+		}
+		return minIndex;
+	}
+
 }

@@ -14,6 +14,8 @@ public interface IGrafo {
 	
 	public Object buscarAresta(Object origem, Object destino);
 	
+	public Object buscarVertice(String nome);
+	
 	public boolean removerAresta(Object origem, Object destino);
 	
 	public boolean removerVerticeAresta(Object o);
