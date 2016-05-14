@@ -20,12 +20,12 @@ import br.uefs.ecomp.fastRoute.model.Vertice;
 
 @SuppressWarnings("serial")
 public class Painel extends JPanel {
-	
-	
+
+
 	public void redesenhar() {
-		
+
 		Graphics g = getGraphics();
-		
+
 
 		Controller controller = Controller.getInstance();
 		ArrayList<Vertice> pontos = controller.getListaPontos();
@@ -47,48 +47,60 @@ public class Painel extends JPanel {
 	}
 	public void desenharCaminho(ArrayList<Vertice> caminho) {
 		Graphics g = getGraphics();
-		
+
 
 		Controller controller = Controller.getInstance();
 		ArrayList<Vertice> pontos = controller.getListaPontos();
 		ArrayList<Aresta> arestasCaminho = controller.pegarArestasMenorRota(caminho);
-		
+		//		Iterator<Aresta> iAresta = arestasCaminho.iterator();
+		//		while(iAresta.hasNext()) {
+		//			Aresta aux = iAresta.next();
+		//			System.out.println("Ponto: " +aux.getPontoAdjacente());
+		//		}
+		//		
+		ArrayList<Vertice> pontosDesenhados= new ArrayList<>();
 		Iterator<Vertice> i = pontos.iterator();
 		while(i.hasNext()) {
 			Vertice ponto = (Vertice) i.next();
-			
-			if(caminho.contains(ponto)) 
+
+			if(caminho.contains(ponto)) {
 				g.setColor(new Color(56, 245, 96));
-			else 
-				g.setColor(new Color(170, 163, 242));
-			
-			g.fillOval(ponto.getX()-40/2, ponto.getY()-40/2, 40, 40);	
-			g.setColor(Color.black);
-			g.drawString(ponto.getNome(), ponto.getX() - 20, ponto.getY() - 25);
+
+				g.fillOval(ponto.getX()-40/2, ponto.getY()-40/2, 40, 40);	
+				g.setColor(Color.black);
+				g.drawString(ponto.getNome(), ponto.getX() - 20, ponto.getY() - 25);
+			}
 				
+
+
 			Iterator<Aresta> iteradorArestas = ponto.iterator();
 			while(iteradorArestas.hasNext()) {
 				Aresta aresta = iteradorArestas.next();
 				Vertice pontoAdj = (Vertice) aresta.getPontoAdjacente();
-				g.setColor(Color.black);
-				if(arestasCaminho.contains(aresta))
-					g.setColor(new Color(56, 245, 96));
-				g.drawLine(ponto.getX(), ponto.getY(), pontoAdj.getX() , pontoAdj.getY());
+
+				if(arestasCaminho.contains(aresta)){
+					System.out.println("Aresta verde: " +ponto+ "->" +pontoAdj);
+					//g.setColor(new Color(56, 245, 96));
+					g.setColor(Color.green);
+					g.drawLine(ponto.getX(), ponto.getY(), pontoAdj.getX() , pontoAdj.getY());
+				} 
 			}
+
+
 		}
 	}
-//	public Dimension getPreferredSize() {
-//	    return new Dimension(400,280);
-//	}
-//	public static void main(String[] args) {
-//	    Runnable r = new Runnable() {
-//	        public void run() {
-//	            Painel p = new Painel();
-//	            JOptionPane.showMessageDialog(null, p);
-//	        }
-//	    };
-//	    SwingUtilities.invokeLater(r);
-//	}
+	//	public Dimension getPreferredSize() {
+	//	    return new Dimension(400,280);
+	//	}
+	//	public static void main(String[] args) {
+	//	    Runnable r = new Runnable() {
+	//	        public void run() {
+	//	            Painel p = new Painel();
+	//	            JOptionPane.showMessageDialog(null, p);
+	//	        }
+	//	    };
+	//	    SwingUtilities.invokeLater(r);
+	//	}
 
 
 }

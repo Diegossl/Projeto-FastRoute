@@ -166,20 +166,59 @@ public class Controller {
 		}
 		return listaPontosMenorCaminho;
 	}
+//	public ArrayList<Aresta> pegarArestasMenorRota(ArrayList<Vertice> caminho) {
+//
+//		ArrayList<Aresta> arestasCaminho = new ArrayList<>();
+//
+//		for(int i = 0; i < caminho.size(); i++){
+//
+//			Vertice atual = caminho.get(i);
+//
+//			if(i+1 > caminho.size())
+//
+//				break;
+//
+//			Vertice prox = caminho.get(i+1);
+//
+//			Aresta aresta = buscarAresta(atual, prox);
+//
+//			arestasCaminho.add(aresta);
+//
+//		}
+//
+//		return arestasCaminho;
+//
+//	}
 	public ArrayList<Aresta> pegarArestasMenorRota(ArrayList<Vertice> caminho) {
-		
+
 		ArrayList<Aresta> arestasCaminho = new ArrayList<>();
-		Iterator<Vertice> i = caminho.iterator();
-		while(i.hasNext()) {
-			Vertice ponto = i.next();
-			Vertice proxPonto = i.next();
-			Iterator<Aresta> iAresta = ponto.iterator();
-			while(iAresta.hasNext()) {
-				Aresta arestaAux = iAresta.next();
-				if(arestaAux.getPontoAdjacente().equals(proxPonto))
-					arestasCaminho.add(arestaAux);						
-			}
+
+		for(int i = 0; i < caminho.size(); i++){
+
+			
+
+			if(i+1 >= caminho.size())
+				break;
+
+			Aresta aresta = buscarAresta(caminho.get(i), caminho.get(i+1));
+
+			arestasCaminho.add(aresta);
+
 		}
+
 		return arestasCaminho;
+
+	}
+//	public boolean saoLigados(Vertice pontoUm, Vertice pontoDois) {
+//		if(temPonto(pontoUm.getLista(), pontoDois) && temPonto(pontoDois) )
+//	}
+	public boolean temPonto(ArrayList<Aresta> arestas, Vertice ponto) {
+		Iterator<Aresta> i = arestas.iterator();
+		while(i.hasNext()) {
+			Aresta aux = i.next();
+			if(aux.getPontoAdjacente().equals(ponto))
+				return true;
+		}
+		return false;
 	}
 }

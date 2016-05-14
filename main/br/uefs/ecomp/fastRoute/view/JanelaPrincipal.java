@@ -60,7 +60,7 @@ import javax.swing.JTextField;
 public class JanelaPrincipal {
 
 	private JFrame frame;
-	private Controller controller = Controller.getInstance();
+	private static Controller controller = Controller.getInstance();
 
 	/**
 	 * Launch the application.
@@ -110,7 +110,8 @@ public class JanelaPrincipal {
 	private void initialize() {
 		//Controller controller = Controller.getInstance();
 		frame = new JFrame();
-		frame.setBounds(100, 100, 856, 553);
+		frame.setResizable(false);
+		frame.setBounds(100, 100, 844, 542);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -120,7 +121,7 @@ public class JanelaPrincipal {
 		
 		Painel painelDesenho = new Painel();
 		//JPanel painelDesenho = new JPanel();
-		painelDesenho.setBackground(SystemColor.controlHighlight);
+		painelDesenho.setBackground(SystemColor.scrollbar);
 		
 		GroupLayout layoutPainelCadastroPonto = new GroupLayout(panel);
 		layoutPainelCadastroPonto.setHorizontalGroup(
@@ -129,10 +130,115 @@ public class JanelaPrincipal {
 		);
 		layoutPainelCadastroPonto.setVerticalGroup(
 			layoutPainelCadastroPonto.createParallelGroup(Alignment.LEADING)
-				.addComponent(painelDesenho, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
+				.addComponent(painelDesenho, GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
 		);
 		
-		painelDesenho.addMouseListener(new MouseAdapter() {
+		painelDesenho.addMouseListener(acaoCadastrarPonto(painelDesenho));
+		
+		JPopupMenu popupMenuCadastrar = new JPopupMenu();
+		
+		JMenuItem mntmCadastrarPonto = new JMenuItem("Cadastrar Ponto");
+		mntmCadastrarPonto.setIcon(new ImageIcon("imagem\\bank.png"));
+		mntmCadastrarPonto.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				JOptionPane.showMessageDialog(null, "Clique em qualquer lugar da tela abaixo para cadastrar");
+			}
+		});
+
+		popupMenuCadastrar.add(mntmCadastrarPonto);
+		
+		JPopupMenu popupMenuRemover = new JPopupMenu();
+		
+		JMenuItem mntmRemoverPonto = new JMenuItem("Remover Ponto");
+		mntmRemoverPonto.setIcon(new ImageIcon("imagem\\bank.png"));
+		mntmRemoverPonto.addActionListener(acaoRemoverPonto(painelDesenho));
+		popupMenuRemover.add(mntmRemoverPonto);
+		
+		JMenuItem mntmRemoverCaminho = new JMenuItem("Remover Caminho");
+		mntmRemoverCaminho.setIcon(new ImageIcon("imagem\\line.png"));
+		mntmRemoverCaminho.addActionListener(acaoRemoverCaminho(painelDesenho));
+
+	
+		popupMenuRemover.add(mntmRemoverCaminho);
+		frame.getContentPane().setLayout(null);
+		
+		
+
+		
+		JMenuItem mntmCadastrarCaminho = new JMenuItem("Cadastrar Caminho");
+		
+		mntmCadastrarCaminho.setIcon(new ImageIcon("imagem\\line.png"));
+		mntmCadastrarCaminho.addActionListener(acaoCadastrarCaminho(painelDesenho));
+		
+		
+		
+		popupMenuCadastrar.add(mntmCadastrarCaminho);
+		
+		panel.setLayout(layoutPainelCadastroPonto);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBounds(0, 0, 840, 514);
+		frame.getContentPane().add(panel_1);
+		panel_1.setLayout(null);
+		
+		JToolBar toolBar = new JToolBar();
+		toolBar.setFloatable(false);
+		toolBar.setBounds(0, 0, 852, 38);
+		panel_1.add(toolBar);
+		toolBar.setBackground(SystemColor.controlHighlight);
+		JButton botaoCadastrar = new JButton("");
+		botaoCadastrar.setContentAreaFilled(false);
+		botaoCadastrar.setOpaque(false);
+		botaoCadastrar.setBorderPainted(false);
+		botaoCadastrar.setFocusPainted(false);
+		botaoCadastrar.setToolTipText("Cadastrar");
+		botaoCadastrar.setIcon(new ImageIcon("imagem\\add.png"));
+		
+		
+		toolBar.add(botaoCadastrar);
+		addPopup(botaoCadastrar, popupMenuCadastrar);
+		
+		JButton botaoRemover = new JButton("");
+		botaoRemover.setContentAreaFilled(false);
+		botaoRemover.setOpaque(false);
+		botaoRemover.setBorderPainted(false);
+		botaoRemover.setToolTipText("Remover");
+		botaoRemover.setIcon(new ImageIcon("imagem\\garbage.png"));
+		toolBar.add(botaoRemover);
+		addPopup(botaoRemover, popupMenuRemover);
+		
+		JButton botaoCalcularCaminho = new JButton("");
+		
+		botaoCalcularCaminho.setContentAreaFilled(false);
+		botaoCalcularCaminho.setOpaque(false);
+		botaoCalcularCaminho.setBorderPainted(false);
+		botaoCalcularCaminho.setToolTipText("Calcular Menor Caminho");
+		botaoCalcularCaminho.setIcon(new ImageIcon("imagem\\route.png"));
+		botaoCalcularCaminho.addActionListener(acaoCalcularCaminho(painelDesenho, botaoCalcularCaminho));
+		toolBar.add(botaoCalcularCaminho);
+		
+		JButton botaoAtualizar = new JButton("");
+		
+		botaoAtualizar.setContentAreaFilled(false);
+		botaoAtualizar.setOpaque(false);
+		botaoAtualizar.setBorderPainted(false);
+		botaoAtualizar.setToolTipText("Atualizar Exibição");
+		botaoAtualizar.setIcon(new ImageIcon("imagem\\reload.png"));
+		botaoAtualizar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				painelDesenho.paint(painelDesenho.getGraphics());
+				painelDesenho.redesenhar();	
+			}
+		});
+		toolBar.add(botaoAtualizar);
+	}
+	
+	public static MouseAdapter acaoCadastrarPonto(Painel painelDesenho) {
+		MouseAdapter mouseAdapter = new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				
@@ -164,79 +270,12 @@ public class JanelaPrincipal {
 				g.setColor(new Color(170, 163, 242));
 				g.fillOval(arg0.getX()-40/2, arg0.getY()-40/2, 40, 40);	
 			}
-		});
-		
-		JPopupMenu popupMenuCadastrar = new JPopupMenu();
-		
-		JMenuItem mntmCadastrarPonto = new JMenuItem("Cadastrar Ponto");
-		mntmCadastrarPonto.setIcon(new ImageIcon("imagem\\bank.png"));
-		mntmCadastrarPonto.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "Clique em qualquer lugar da tela abaixo para cadastrar");
-			}
-		});
-
-		popupMenuCadastrar.add(mntmCadastrarPonto);
-		
-		JPopupMenu popupMenuRemover = new JPopupMenu();
-		
-		JMenuItem mntmRemoverPonto = new JMenuItem("Remover Ponto");
-		mntmRemoverPonto.setIcon(new ImageIcon("imagem\\bank.png"));
-		mntmRemoverPonto.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JComboBox comboPonto = new JComboBox(controller.getListaPontos().toArray()); 
-				int opcao = JOptionPane.showConfirmDialog(null, comboPonto, "Selecione os pontos que deseja remover", JOptionPane.OK_CANCEL_OPTION);
-				if(opcao == JOptionPane.OK_OPTION) {
-					Vertice pontoRemover = (Vertice) comboPonto.getSelectedItem();
-					try {
-						controller.removerVerticeAresta(pontoRemover);
-						painelDesenho.paint(painelDesenho.getGraphics());
-						painelDesenho.redesenhar();	
-					} catch (PontoNuloException e1) {
-						JOptionPane.showMessageDialog(null, "Por favor, escolha um ponto não nulo");
-					}
-				}
-				
-				
-			}
-		});
-		popupMenuRemover.add(mntmRemoverPonto);
-		
-		JMenuItem mntmRemoverCaminho = new JMenuItem("Remover Caminho");
-		mntmRemoverCaminho.setIcon(new ImageIcon("imagem\\line.png"));
-		mntmRemoverCaminho.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Vertice pontoUm = null, pontoDois = null;
-				JComboBox comboPontoUm = new JComboBox(controller.getListaPontos().toArray()); 
-				JComboBox comboPontoDois = new JComboBox(controller.getListaPontos().toArray());
-				Object[] messagem = {"Selecione o ponto um", comboPontoUm, "Selecione o ponto dois", comboPontoDois};
-				int opcao = JOptionPane.showConfirmDialog(null, messagem, "Selecione os pontos", JOptionPane.OK_CANCEL_OPTION);
-				if(opcao == JOptionPane.OK_OPTION) {
-					pontoUm = (Vertice) comboPontoUm.getSelectedItem();
-					pontoDois = (Vertice) comboPontoDois.getSelectedItem();
-					try {
-						controller.removerAresta(pontoUm, pontoDois);
-						painelDesenho.paint(painelDesenho.getGraphics());
-						painelDesenho.redesenhar();	
-					} catch (PontoNuloException e1) {
-						JOptionPane.showMessageDialog(null, "Por favor, escolha um ponto não nulo");
-					}
-				}
-			}
-		});
-		popupMenuRemover.add(mntmRemoverCaminho);
-		frame.getContentPane().setLayout(null);
-		
-		
-
-		
-		JMenuItem mntmCadastrarCaminho = new JMenuItem("Cadastrar Caminho");
-		
-		mntmCadastrarCaminho.setIcon(new ImageIcon("imagem\\line.png"));
-		mntmCadastrarCaminho.addActionListener(new ActionListener() {
+		};
+		return mouseAdapter;
+	}
+	
+	public static ActionListener acaoCadastrarCaminho(Painel painelDesenho) {
+		ActionListener act = new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Graphics g = painelDesenho.getGraphics();
 				Vertice pontoUm = null, pontoDois = null;
@@ -265,50 +304,62 @@ public class JanelaPrincipal {
 				g.setColor(Color.black);
 				g.drawLine(pontoUm.getX(), pontoUm.getY(), pontoDois.getX(), pontoDois.getY());
 			}
-		});
-		
-		
-		
-		popupMenuCadastrar.add(mntmCadastrarCaminho);
-		
-		panel.setLayout(layoutPainelCadastroPonto);
-		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(0, 0, 840, 514);
-		frame.getContentPane().add(panel_1);
-		panel_1.setLayout(null);
-		
-		JToolBar toolBar = new JToolBar();
-		toolBar.setBounds(0, 0, 840, 38);
-		panel_1.add(toolBar);
-		toolBar.setBackground(UIManager.getColor("Button.light"));
-		JButton botaoCadastrar = new JButton("");
-		botaoCadastrar.setOpaque(false);
-		
-		botaoCadastrar.setToolTipText("Cadastrar");
-		botaoCadastrar.setIcon(new ImageIcon("imagem\\add.png"));
-		
-		toolBar.add(botaoCadastrar);
-		addPopup(botaoCadastrar, popupMenuCadastrar);
-		
-		JButton botaoRemover = new JButton("");
-		botaoRemover.setContentAreaFilled(false);
-		botaoRemover.setOpaque(false);
-		botaoRemover.setBorderPainted(false);
-		botaoRemover.setToolTipText("Remover");
-		botaoRemover.setIcon(new ImageIcon("imagem\\garbage.png"));
-		toolBar.add(botaoRemover);
-		addPopup(botaoRemover, popupMenuRemover);
-		
-		JButton botaoCalcularCaminho = new JButton("");
-		
-		botaoCalcularCaminho.setBorderPainted(false);
-		botaoCalcularCaminho.setToolTipText("Calcular Menor Caminho");
-		botaoCalcularCaminho.setIcon(new ImageIcon("imagem\\route.png"));
-		botaoCalcularCaminho.addActionListener(new ActionListener() {
+		};
+		return act;
+	}
+	
+	public static  ActionListener acaoRemoverPonto(Painel painelDesenho) {
+		ActionListener act = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JComboBox comboPonto = new JComboBox(controller.getListaPontos().toArray()); 
+				int opcao = JOptionPane.showConfirmDialog(null, comboPonto, "Selecione os pontos que deseja remover", JOptionPane.OK_CANCEL_OPTION);
+				if(opcao == JOptionPane.OK_OPTION) {
+					Vertice pontoRemover = (Vertice) comboPonto.getSelectedItem();
+					try {
+						controller.removerVerticeAresta(pontoRemover);
+						painelDesenho.paint(painelDesenho.getGraphics());
+						painelDesenho.redesenhar();	
+					} catch (PontoNuloException e1) {
+						JOptionPane.showMessageDialog(null, "Por favor, escolha um ponto não nulo");
+					}
+				}
+			}
+		};
+		return act;
+	}
+	
+	public static ActionListener acaoRemoverCaminho(Painel painelDesenho) {
+		ActionListener act = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Vertice pontoUm = null, pontoDois = null;
+				JComboBox comboPontoUm = new JComboBox(controller.getListaPontos().toArray()); 
+				JComboBox comboPontoDois = new JComboBox(controller.getListaPontos().toArray());
+				Object[] messagem = {"Selecione o ponto um", comboPontoUm, "Selecione o ponto dois", comboPontoDois};
+				int opcao = JOptionPane.showConfirmDialog(null, messagem, "Selecione os pontos", JOptionPane.OK_CANCEL_OPTION);
+				if(opcao == JOptionPane.OK_OPTION) {
+					pontoUm = (Vertice) comboPontoUm.getSelectedItem();
+					pontoDois = (Vertice) comboPontoDois.getSelectedItem();
+					try {
+						controller.removerAresta(pontoUm, pontoDois);
+						painelDesenho.paint(painelDesenho.getGraphics());
+						painelDesenho.redesenhar();	
+					} catch (PontoNuloException e1) {
+						JOptionPane.showMessageDialog(null, "Por favor, escolha um ponto não nulo");
+					}
+				}
+			}
+		};
+		return act;
+	}
+	
+	public static ActionListener acaoCalcularCaminho(Painel painelDesenho, JButton button) {
+		ActionListener act = new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				button.setPressedIcon(button.getIcon());
 				JComboBox comboPontoUm = new JComboBox(controller.getListaPontos().toArray()); 
 				JComboBox comboPontoDois = new JComboBox(controller.getListaPontos().toArray());
 				JComboBox comboPontoTres = new JComboBox(controller.getListaPontos().toArray());
@@ -322,17 +373,15 @@ public class JanelaPrincipal {
 					ArrayList<Vertice> caminhoUm = controller.calcularMenorRota(garagem, pontoColeta);
 					ArrayList<Vertice> caminhoDois = controller.calcularMenorRota(pontoColeta, pontoDestino);
 					caminhoUm.addAll(caminhoDois);
-					painelDesenho.paint(painelDesenho.getGraphics());
+					//painelDesenho.paint(painelDesenho.getGraphics());
 					painelDesenho.desenharCaminho(caminhoUm);	
 				}
 				
 			}
-		});
-		toolBar.add(botaoCalcularCaminho);
-		
-		
-		
+		};
+		return act;
 	}
+	
 	private static void addPopup(JButton button, final JPopupMenu popup) {
 		button.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
@@ -347,7 +396,5 @@ public class JanelaPrincipal {
 			}
 		});
 	}
-	public void cadastroVisivel() {
-		
-	}
+	
 }
